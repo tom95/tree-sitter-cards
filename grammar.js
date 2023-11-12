@@ -23,7 +23,7 @@ module.exports = grammar({
 
     sequence: $ => sep1($.card, ','),
 
-    card: $ => seq($.identifier, '(', sep($.expression, ','), ')', optional($.scope)),
+    card: $ => seq(field('name', $.identifier), $.arguments, optional($.scope)),
 
     scope: $ => seq('[', sep1($.sequence, '.'), ']'),
 
@@ -31,11 +31,13 @@ module.exports = grammar({
       $.identifier,
       $.call,
       $.number,
+      $.string,
       $.duration,
       $.binary_expression,
       $.wildcard,
     ),
 
+    string: ($) => token(seq("'", /([^']|'')*/, "'")),
     pool_initializer: $ => seq($.identifier, ':', $.number),
     wildcard: $ => '*',
     number: $ => /[0-9]+(\.[0-9]*)?/,
@@ -43,7 +45,7 @@ module.exports = grammar({
     duration_specifier: $ => choice('s', 'ms', 'm'),
     call: $ => prec(2, seq($.identifier, $.arguments)),
     arguments: $ => seq('(', sep($.expression, ','), ')'),
-    binary_expression: $ => prec.left(1, seq($.expression, choice('+', '-', '>', '<', '=', '/', '*'), $.expression)),
+    binary_expression: $ => prec.left(1, seq($.expression, choice('+', '-', '>', '<', '<=', '>=', '=', '/', '*'), $.expression)),
 
     identifier: $ => {
       const alpha = /[^\x00-\x1F\s\p{Zs}0-9:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/

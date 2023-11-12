@@ -24,6 +24,10 @@
         "named": true
       },
       {
+        "type": "string",
+        "named": true
+      },
+      {
         "type": "wildcard",
         "named": true
       }
@@ -81,13 +85,24 @@
   {
     "type": "card",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "expression",
+          "type": "arguments",
           "named": true
         },
         {
@@ -324,11 +339,19 @@
     "named": false
   },
   {
+    "type": "<=",
+    "named": false
+  },
+  {
     "type": "=",
     "named": false
   },
   {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": ">=",
     "named": false
   },
   {
@@ -370,5 +393,9 @@
   {
     "type": "s",
     "named": false
+  },
+  {
+    "type": "string",
+    "named": true
   }
 ]

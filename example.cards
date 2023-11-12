@@ -2,13 +2,13 @@ Group Setup[
 	Object PlayerHead[].
 
 	Object Player[
-		Sprite(player.png).
+		Sprite('player.png').
 		Pool Hitpoints[Hitpoint: 90].
 		PlayerHead()].
 
 	Object Candy[
 		RigidBodyPhysics().
-		Sprite(candy.png).
+		Sprite('candy.png').
 		Pool Hitpoints[Hitpoint: 30]].
 
 	Start(),
@@ -36,11 +36,11 @@ Group Damage [
 	Restart().
 ].
 
-Group Push Attack [
+Group PushAttack [
 Input(Tab,Player),
 Cooldown(0.2s),
 Query(dist()<20,Candy)[
-	Effect(Apply Force)].
+	Effect(ApplyForce)].
 ].
 
 Group Movement [
@@ -57,12 +57,11 @@ Group Movement [
 ].
 
 Group Extra [
-	Event(Collision,Candy,Candy')
+	Event(Collision,Candy,Candy').
 	Fork()[
 		Select(max(velocity)),
 		Remove(Hitpoints,10).
 		Select(max(velocity)),
 		Remove(Hitpoints,5)]
-	]
 ].
 
