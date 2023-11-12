@@ -6,7 +6,7 @@ module.exports = grammar({
   inline: $ => [$.statement],
 
   rules: {
-    game: $ => sep1($.statement, '.'),
+    game: $ => sep($.statement, '.'),
 
     statement: $ => choice(
       $.group,
