@@ -1,0 +1,68 @@
+Group Setup[
+	Object PlayerHead[].
+
+	Object Player[
+		Sprite(player.png).
+		Pool Hitpoints[Hitpoint: 90].
+		PlayerHead()].
+
+	Object Candy[
+		RigidBodyPhysics().
+		Sprite(candy.png).
+		Pool Hitpoints[Hitpoint: 30]].
+
+	Start(),
+	Spawn(Player).
+].
+
+Group Damage [
+	Timer(every=1s),
+	Branch(random()>0.1)[
+		Spawn(Candy).
+		Spawn(ExplosiveCandy).].
+
+	Event(Collision,Candy,PlayerHead),
+	Remove(Hitpoints,5).
+
+	Event(Collision,ExplosiveCandy,*),
+	Query(dist()<20,Candy,Player)[
+		Remove(Hitpoints,floor(1/dist()*8))],
+	Remove(ExplosiveCandy).
+
+	Condition(count(Hitpoints)<=0,Candy,Player),
+	Remove().
+
+	Event(Removed,Player),
+	Restart().
+].
+
+Group Push Attack [
+Input(Tab,Player),
+Cooldown(0.2s),
+Query(dist()<20,Candy)[
+	Effect(Apply Force)].
+].
+
+Group Movement [
+	Input(Left,Player),
+	Effect(Move).
+
+	Input(Right,Player),
+	Effect(Move).
+
+	Input(Space,Player),
+	Effect(Move).
+
+	Template(Falling,Candy,Player,ExplosiveCandy).
+].
+
+Group Extra [
+	Event(Collision,Candy,Candy')
+	Fork()[
+		Select(max(velocity)),
+		Remove(Hitpoints,10).
+		Select(max(velocity)),
+		Remove(Hitpoints,5)]
+	]
+].
+
