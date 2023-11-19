@@ -23,7 +23,9 @@ module.exports = grammar({
 
     sequence: $ => sep1($.card, ','),
 
-    card: $ => seq(field('name', $.identifier), $.arguments, optional($.scope)),
+    card: $ => seq(field('name', $.identifier), optional($.resources), $.arguments, optional($.scope)),
+
+    resources: $ => seq('[', sep(choice($.identifier, $.wildcard), ','),']'),
 
     scope: $ => seq('[', sep1($.sequence, '.'), ']'),
 

@@ -12,56 +12,56 @@ Group Setup[
 		Pool Hitpoints[Hitpoint: 30]].
 
 	Start(),
-	Spawn(Player).
+	Spawn[Player]().
 ].
 
 Group Damage [
 	Timer(every=1s),
 	Branch(random()>0.1)[
-		Spawn(Candy).
-		Spawn(ExplosiveCandy).].
+		Spawn[Candy]().
+		Spawn[ExplosiveCandy]().].
 
-	Event(Collision,Candy,PlayerHead),
+	Event[Candy,PlayerHead](Collision),
 	Remove(Hitpoints,5).
 
-	Event(Collision,ExplosiveCandy,*),
-	Query(dist()<20,Candy,Player)[
+	Event[ExplosiveCandy,*](Collision),
+	Query[Candy,Player](dist()<20)[
 		Remove(Hitpoints,floor(1/dist()*8))],
-	Remove(ExplosiveCandy).
+	Remove[ExplosiveCandy]().
 
-	Condition(count(Hitpoints)<=0,Candy,Player),
+	Condition[Candy,Player](count(Hitpoints)<=0),
 	Remove().
 
-	Event(Removed,Player),
+	Event[Player](Removed),
 	Restart().
 ].
 
 Group PushAttack [
-Input(Tab,Player),
+Input[Player](Tab),
 Cooldown(0.2s),
-Query(dist()<20,Candy)[
+Query[Candy](dist()<20)[
 	Effect(ApplyForce)].
 ].
 
 Group Movement [
-	Input(Left,Player),
+	Input[Player](Left),
 	Effect(Move).
 
-	Input(Right,Player),
+	Input[Player](Right),
 	Effect(Move).
 
-	Input(Space,Player),
+	Input[Player](Space),
 	Effect(Move).
 
-	Template(Falling,Candy,Player,ExplosiveCandy).
+	Template[Candy,Player,ExplosiveCandy](Falling).
 ].
 
 Group Extra [
-	Event(Collision,Candy,Candy').
+	Event[Candy,Candy'](Collision).
 	Fork()[
 		Select(max(velocity)),
 		Remove(Hitpoints,10).
 		Select(max(velocity)),
-		Remove(Hitpoints,5)]
+		Remove(Hitpoints,5)].
 ].
 
